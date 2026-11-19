@@ -1,0 +1,19 @@
+name: Build VST3
+on: [push, workflow_dispatch]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Clone JUCE
+        run: git clone --depth 1 https://github.com/juce-framework/JUCE.git
+      - name: Configure & Build
+        run: |
+          cmake -B build
+          cmake --build build --config Release --target VoltageStarve_VST3
+      - name: Upload VST3
+        uses: actions/upload-artifact@v4
+        with:
+          name: VoltageStarve-VST3
+          path: build/VoltageStarve_artefacts/Release/VST3/VoltageStarve.vst3
